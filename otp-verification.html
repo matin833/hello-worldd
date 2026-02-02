@@ -1,58 +1,62 @@
 <style>
 .otp-container {
     background-color: #F2F2F2;
-    padding: 40px 20px;
+    padding: 20px;
     text-align: center;
 }
 
-.otp-error-banner {
-    display: none;
-    background-color: #F2F2F2;
-    color: #ff0000;
-    padding: 15px;
-    margin-bottom: 20px;
-    font-weight: bold;
-    font-size: 16px;
+.otp-input-wrapper {
+    border-bottom: 1px solid #c1d2f0;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .otp-input {
-    width: 100%;
-    max-width: 250px;
-    padding: 12px 15px;
-    font-size: 16px;
-    border: 1px solid #ccc;
+    border: #999 solid 1px;
+    font-size: 13px;
+    color: #676566;
+    background-color: #ffffff;
+    background-image: none;
+    width: 140px;
+    padding: 4px;
+    font-family: Tahoma, Helvetica, Arial, sans-serif;
     border-radius: 0;
-    margin-bottom: 30px;
     box-sizing: border-box;
 }
 
 .otp-input:focus {
     outline: none;
-    border-color: #636162;
 }
 
 .otp-buttons {
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 6px;
 }
 
 .otp-btn {
     background-color: #636162;
+    background-image: none;
     color: #ffffff;
     border: none;
     border-radius: 0;
-    padding: 12px 30px;
-    font-size: 14px;
-    font-weight: bold;
+    padding: 5px;
+    font-size: 15px;
+    font-weight: normal;
+    font-family: Tahoma, Helvetica, Arial, sans-serif;
     cursor: pointer;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: background-color 0.3s ease;
+    height: 35px;
+    margin: 10px 3px;
+    min-width: 90px;
+    width: auto;
+    overflow: visible;
 }
 
 .otp-btn:hover {
-    background-color: #4E81C0;
+    background-color: #4e81c0;
+    background-image: none;
+    cursor: pointer;
 }
 
 /* PDF Container - initially hidden */
@@ -63,15 +67,13 @@
 </style>
 
 <div class="otp-container" id="otpForm">
-    <div class="otp-error-banner" id="errorBanner">
-        Invalid OTP
+    <div class="otp-input-wrapper">
+        <input type="text" class="otp-input" id="otpInput" maxlength="8">
     </div>
 
-    <input type="text" class="otp-input" id="otpInput" placeholder="" maxlength="8">
-
     <div class="otp-buttons">
-        <button class="otp-btn" id="submitBtn" onclick="verifyOTP()">Submit</button>
-        <button class="otp-btn" id="resendBtn" onclick="resendOTP()">Resend OTP</button>
+        <input type="button" class="otp-btn" id="submitBtn" onclick="verifyOTP()" value="Submit">
+        <input type="button" class="otp-btn" id="resendBtn" onclick="resendOTP()" value="Resend OTP">
     </div>
 </div>
 
@@ -86,20 +88,24 @@ const RESEND_PAGE_URL = window.location.href; // Change this to your specific pa
 
 function verifyOTP() {
     const otpInput = document.getElementById('otpInput');
-    const errorBanner = document.getElementById('errorBanner');
+    const invalidBanner = document.getElementById('invalid');
     const otpForm = document.getElementById('otpForm');
     const pdfContainer = document.getElementById('pdfContainer');
 
     const enteredOTP = otpInput.value.trim();
 
     if (enteredOTP === CORRECT_OTP) {
-        // Correct OTP - hide form, show PDF
-        errorBanner.style.display = 'none';
+        // Correct OTP - hide form and invalid banner, show PDF
+        if (invalidBanner) {
+            invalidBanner.style.display = 'none';
+        }
         otpForm.style.display = 'none';
         pdfContainer.style.display = 'block';
     } else {
-        // Wrong OTP - show error banner
-        errorBanner.style.display = 'block';
+        // Wrong OTP - show the existing Elementor invalid element
+        if (invalidBanner) {
+            invalidBanner.style.display = 'block';
+        }
     }
 }
 
