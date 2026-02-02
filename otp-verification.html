@@ -1,0 +1,117 @@
+<style>
+.otp-container {
+    background-color: #F2F2F2;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.otp-error-banner {
+    display: none;
+    background-color: #F2F2F2;
+    color: #ff0000;
+    padding: 15px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.otp-input {
+    width: 100%;
+    max-width: 250px;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 0;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+}
+
+.otp-input:focus {
+    outline: none;
+    border-color: #636162;
+}
+
+.otp-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.otp-btn {
+    background-color: #636162;
+    color: #ffffff;
+    border: none;
+    border-radius: 0;
+    padding: 12px 30px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease;
+}
+
+.otp-btn:hover {
+    background-color: #4E81C0;
+}
+
+/* PDF Container - initially hidden */
+.pdf-container {
+    display: none;
+    padding: 20px;
+}
+</style>
+
+<div class="otp-container" id="otpForm">
+    <div class="otp-error-banner" id="errorBanner">
+        Invalid OTP
+    </div>
+
+    <input type="text" class="otp-input" id="otpInput" placeholder="" maxlength="8">
+
+    <div class="otp-buttons">
+        <button class="otp-btn" id="submitBtn" onclick="verifyOTP()">Submit</button>
+        <button class="otp-btn" id="resendBtn" onclick="resendOTP()">Resend OTP</button>
+    </div>
+</div>
+
+<!-- PDF Container - add your PDF embed here -->
+<div class="pdf-container" id="pdfContainer">
+    <!-- Your PDF element goes here -->
+</div>
+
+<script>
+const CORRECT_OTP = '12345678';
+const RESEND_PAGE_URL = window.location.href; // Change this to your specific page URL if needed
+
+function verifyOTP() {
+    const otpInput = document.getElementById('otpInput');
+    const errorBanner = document.getElementById('errorBanner');
+    const otpForm = document.getElementById('otpForm');
+    const pdfContainer = document.getElementById('pdfContainer');
+
+    const enteredOTP = otpInput.value.trim();
+
+    if (enteredOTP === CORRECT_OTP) {
+        // Correct OTP - hide form, show PDF
+        errorBanner.style.display = 'none';
+        otpForm.style.display = 'none';
+        pdfContainer.style.display = 'block';
+    } else {
+        // Wrong OTP - show error banner
+        errorBanner.style.display = 'block';
+    }
+}
+
+function resendOTP() {
+    // Reload the page
+    window.location.href = RESEND_PAGE_URL;
+}
+
+// Allow Enter key to submit
+document.getElementById('otpInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        verifyOTP();
+    }
+});
+</script>
