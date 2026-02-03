@@ -17,11 +17,11 @@
     color: #676566;
     background-color: #ffffff;
     background-image: none;
-    width: 140px;
     padding: 4px;
     font-family: Tahoma, Helvetica, Arial, sans-serif;
     border-radius: 0;
     box-sizing: border-box;
+    width: 30% !important;
 }
 
 .otp-input:focus {
@@ -58,12 +58,6 @@
     background-image: none;
     cursor: pointer;
 }
-
-/* PDF Container - initially hidden */
-.pdf-container {
-    display: none;
-    padding: 20px;
-}
 </style>
 
 <div class="otp-container" id="otpForm">
@@ -77,44 +71,42 @@
     </div>
 </div>
 
-<!-- PDF Container - add your PDF embed here -->
-<div class="pdf-container" id="pdfContainer">
-    <!-- Your PDF element goes here -->
-</div>
-
 <script>
 const CORRECT_OTP = '12345678';
-const RESEND_PAGE_URL = window.location.href; // Change this to your specific page URL if needed
+const RESEND_PAGE_URL = window.location.href;
+
+// ========== CHANGE THESE IDs TO MATCH YOUR ELEMENTOR ELEMENTS ==========
+const PDF_ELEMENT_ID = 'pdfDocument';      // <-- Your PDF element's ID
+const INVALID_BANNER_ID = 'invalid';       // <-- Your "OTP is invalid" element's ID
+// =======================================================================
 
 function verifyOTP() {
     const otpInput = document.getElementById('otpInput');
-    const invalidBanner = document.getElementById('invalid');
     const otpForm = document.getElementById('otpForm');
-    const pdfContainer = document.getElementById('pdfContainer');
+    const pdfContainer = document.getElementById(PDF_ELEMENT_ID);
+    const invalidBanner = document.getElementById(INVALID_BANNER_ID);
 
     const enteredOTP = otpInput.value.trim();
 
     if (enteredOTP === CORRECT_OTP) {
-        // Correct OTP - hide form and invalid banner, show PDF
         if (invalidBanner) {
-            invalidBanner.style.display = 'none';
+            invalidBanner.style.setProperty('display', 'none', 'important');
         }
         otpForm.style.display = 'none';
-        pdfContainer.style.display = 'block';
+        if (pdfContainer) {
+            pdfContainer.style.setProperty('display', 'block', 'important');
+        }
     } else {
-        // Wrong OTP - show the existing Elementor invalid element
         if (invalidBanner) {
-            invalidBanner.style.display = 'block';
+            invalidBanner.style.setProperty('display', 'block', 'important');
         }
     }
 }
 
 function resendOTP() {
-    // Reload the page
     window.location.href = RESEND_PAGE_URL;
 }
 
-// Allow Enter key to submit
 document.getElementById('otpInput').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
         verifyOTP();
