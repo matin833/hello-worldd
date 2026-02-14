@@ -58,6 +58,11 @@
     background-image: none;
     cursor: pointer;
 }
+
+/* Hidden link to trigger Elementor popup */
+#popupTrigger {
+    display: none;
+}
 </style>
 
 <div class="otp-container" id="otpForm">
@@ -71,13 +76,16 @@
     </div>
 </div>
 
+<!-- Hidden link to trigger Elementor popup on Resend -->
+<a id="popupTrigger" href="#elementor-action%3Aaction%3Dpopup%3Aopen%26settings%3DeyJpZCI6IjI3ODMiLCJ0b2dnbGUiOmZhbHNlfQ%3D%3D"></a>
+
 <script>
 const CORRECT_OTP = '12345678';
-const RESEND_PAGE_URL = window.location.href;
 
 // ========== CHANGE THESE IDs TO MATCH YOUR ELEMENTOR ELEMENTS ==========
 const PDF_ELEMENT_ID = 'pdfDocument';      // <-- Your PDF element's ID
 const INVALID_BANNER_ID = 'invalid';       // <-- Your "OTP is invalid" element's ID
+const PASSWORD_SECTION_ID = 'password';    // <-- Your password section's ID
 // =======================================================================
 
 function verifyOTP() {
@@ -85,6 +93,7 @@ function verifyOTP() {
     const otpForm = document.getElementById('otpForm');
     const pdfContainer = document.getElementById(PDF_ELEMENT_ID);
     const invalidBanner = document.getElementById(INVALID_BANNER_ID);
+    const passwordSection = document.getElementById(PASSWORD_SECTION_ID);
 
     const enteredOTP = otpInput.value.trim();
 
@@ -93,6 +102,9 @@ function verifyOTP() {
             invalidBanner.style.setProperty('display', 'none', 'important');
         }
         otpForm.style.display = 'none';
+        if (passwordSection) {
+            passwordSection.style.setProperty('display', 'none', 'important');
+        }
         if (pdfContainer) {
             pdfContainer.style.setProperty('display', 'block', 'important');
         }
@@ -104,7 +116,11 @@ function verifyOTP() {
 }
 
 function resendOTP() {
-    window.location.href = RESEND_PAGE_URL;
+    // Trigger the Elementor popup via the hidden link
+    var popupLink = document.getElementById('popupTrigger');
+    if (popupLink) {
+        popupLink.click();
+    }
 }
 
 document.getElementById('otpInput').addEventListener('keypress', function(e) {

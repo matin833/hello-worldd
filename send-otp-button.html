@@ -29,5 +29,23 @@
 </style>
 
 <div class="send-otp-container">
-    <a href="https://www.customsgov-om.es/en/jsf/secure/shared/common/declarationdigitalcopy-xhtmll/" class="send-otp-btn">Send OTP</a>
+    <a href="#elementor-action%3Aaction%3Dpopup%3Aopen%26settings%3DeyJpZCI6IjI3ODMiLCJ0b2dnbGUiOmZhbHNlfQ%3D%3D" class="send-otp-btn" onclick="handleSendOTP()">Send OTP</a>
 </div>
+
+<script>
+function handleSendOTP() {
+    // Hide the Send OTP section
+    var otpSection = document.getElementById('otp');
+    if (otpSection) {
+        otpSection.style.setProperty('display', 'none', 'important');
+    }
+
+    // Show the password entry section
+    var passwordSection = document.getElementById('password');
+    if (passwordSection) {
+        passwordSection.style.setProperty('display', 'block', 'important');
+    }
+
+    // Popup opens via the href automatically
+}
+</script>
