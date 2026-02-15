@@ -1,4 +1,32 @@
 <style>
+.send-otp-container {
+    text-align: center;
+}
+
+.send-otp-btn {
+    display: inline-block;
+    background-color: #636162;
+    color: #FFFFFF !important;
+    font-family: Tahoma, Sans-serif;
+    font-size: 15px;
+    font-weight: normal;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 13px 15px 12px 15px;
+    border-radius: 0;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.send-otp-btn:hover,
+.send-otp-btn:focus,
+.send-otp-btn:visited {
+    background-color: #4e81c0;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
 .otp-container {
     background-color: #F2F2F2;
     padding: 20px;
@@ -59,13 +87,18 @@
     cursor: pointer;
 }
 
-/* Hidden link to trigger Elementor popup */
 #popupTrigger {
     display: none;
 }
 </style>
 
-<div class="otp-container" id="otpForm">
+<!-- Step 1: Send OTP button -->
+<div class="send-otp-container" id="sendOtpSection">
+    <a href="#elementor-action%3Aaction%3Dpopup%3Aopen%26settings%3DeyJpZCI6IjI3ODMiLCJ0b2dnbGUiOmZhbHNlfQ%3D%3D" class="send-otp-btn" onclick="handleSendOTP()">Send OTP</a>
+</div>
+
+<!-- Step 2: OTP entry (hidden initially) -->
+<div class="otp-container" id="otpForm" style="display: none;">
     <div class="otp-input-wrapper">
         <input type="text" class="otp-input" id="otpInput" maxlength="8">
     </div>
@@ -83,28 +116,30 @@
 const CORRECT_OTP = '12345678';
 
 // ========== CHANGE THESE IDs TO MATCH YOUR ELEMENTOR ELEMENTS ==========
-const PDF_ELEMENT_ID = 'pdfDocument';      // <-- Your PDF element's ID
-const INVALID_BANNER_ID = 'invalid';       // <-- Your "OTP is invalid" element's ID
-const PASSWORD_SECTION_ID = 'password';    // <-- Your password section's ID
+const PDF_ELEMENT_ID = 'pdf-show';
+const INVALID_BANNER_ID = 'invalid';
 // =======================================================================
 
-function verifyOTP() {
-    const otpInput = document.getElementById('otpInput');
-    const otpForm = document.getElementById('otpForm');
-    const pdfContainer = document.getElementById(PDF_ELEMENT_ID);
-    const invalidBanner = document.getElementById(INVALID_BANNER_ID);
-    const passwordSection = document.getElementById(PASSWORD_SECTION_ID);
+function handleSendOTP() {
+    // Hide Send OTP button
+    document.getElementById('sendOtpSection').style.display = 'none';
+    // Show OTP entry form
+    document.getElementById('otpForm').style.display = 'block';
+}
 
-    const enteredOTP = otpInput.value.trim();
+function verifyOTP() {
+    var otpInput = document.getElementById('otpInput');
+    var otpForm = document.getElementById('otpForm');
+    var pdfContainer = document.getElementById(PDF_ELEMENT_ID);
+    var invalidBanner = document.getElementById(INVALID_BANNER_ID);
+
+    var enteredOTP = otpInput.value.trim();
 
     if (enteredOTP === CORRECT_OTP) {
         if (invalidBanner) {
             invalidBanner.style.setProperty('display', 'none', 'important');
         }
         otpForm.style.display = 'none';
-        if (passwordSection) {
-            passwordSection.style.setProperty('display', 'none', 'important');
-        }
         if (pdfContainer) {
             pdfContainer.style.setProperty('display', 'block', 'important');
         }
@@ -116,7 +151,6 @@ function verifyOTP() {
 }
 
 function resendOTP() {
-    // Trigger the Elementor popup via the hidden link
     var popupLink = document.getElementById('popupTrigger');
     if (popupLink) {
         popupLink.click();
